@@ -5,6 +5,8 @@
 # brew.sh
 #
 
+#=import log
+
 # If CB use /workspace, else /tmp
 _WORKSPACE_DIR="${PROJECT_ID:+/workspace}"
 _WORKSPACE_DIR="${_WORKSPACE_DIR:-/tmp}"
