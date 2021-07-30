@@ -5,38 +5,36 @@
 # brew.sh
 #
 
-#=import log
-
 # If CB use /workspace, else /tmp
-_WORKSPACE_DIR="${PROJECT_ID:+/workspace}"
-_WORKSPACE_DIR="${_WORKSPACE_DIR:-/tmp}"
+[ -d /workspace ] && WORKSPACE_DIR="${PROJECT_ID:+/workspace}"
+WORKSPACE_DIR="${WORKSPACE_DIR:-/tmp}"
 
-_OS="$(uname)"
-_OS="${_OS,,}"
+OS="$(uname)"
+OS="${OS,,}"
 
 is-macos() {
-  [ "${_OS}" = 'darwin' ]
+  [ "${OS}" = 'darwin' ]
 }
 
 is-linux() {
-  [ "${_OS}" = 'linux' ]
+  [ "${OS}" = 'linux' ]
 }
 
 is-windows() {
-  [ "${_OS}" = 'windows' ]
+  [ "${OS}" = 'windows' ]
 }
 
 is-cygwin() {
-  [ "${_OS}" = 'cygwin' ]
+  [ "${OS}" = 'cygwin' ]
 }
 
 if is-macos; then
 
   # awk
-  if [ -z "${_CMD_AWK}" ]; then
+  if [ -z "${CMD_AWK}" ]; then
     type gawk >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-      _CMD_AWK="$(which gawk)"
+      CMD_AWK="$(which gawk)"
     else
       log-error "Must install GNU grep with 'brew install gawk'"
       exit 1
@@ -44,10 +42,10 @@ if is-macos; then
   fi
 
   # find
-  if [ -z "${_CMD_FIND}" ]; then
+  if [ -z "${CMD_FIND}" ]; then
     type gfind >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-      _CMD_FIND="$(which gfind)"
+      CMD_FIND="$(which gfind)"
     else
       log-error "Must install GNU grep with 'brew install findutils'"
       exit 1
@@ -55,19 +53,19 @@ if is-macos; then
   fi
 
   # grep
-  if [ -z "${_CMD_GREP}" ]; then
+  if [ -z "${CMD_GREP}" ]; then
     type ggrep >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-      _CMD_GREP="$(which ggrep)"
+      CMD_GREP="$(which ggrep)"
     else
       log-error "Must install GNU grep with 'brew install grep'"
       exit 1
     fi
   fi
 else
-  _CMD_AWK="${_CMD_AWK:/usr/bin/awk}"
-  _CMD_FIND="${_CMD_FIND:/usr/bin/find}"
-  _CMD_GREP="${_CMD_GREP:/bin/grep}" 
+  CMD_AWK="${CMD_AWK:-/usr/bin/awk}"
+  CMD_FIND="${CMD_FIND:-/usr/bin/find}"
+  CMD_GREP="${CMD_GREP:-/bin/grep}" 
 fi
 
-export _CMD_FIND _CMD_GREP _OS _WORKSPACE_DIR
+export CMD_FIND CMD_GREP OS WORKSPACE_DIR
